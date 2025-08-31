@@ -1,0 +1,26 @@
+# Use an official Node runtime as a base image
+FROM node:18-alpine
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Set work directory
+WORKDIR /app
+
+# Install dependencies
+COPY frontend/package*.json ./
+RUN npm install --production --silent
+
+# Copy application code
+COPY frontend/ /app/frontend/
+
+# Build Next.js application
+WORKDIR /app/frontend
+RUN npm run build
+
+# Expose port
+EXPOSE 3000
+
+# Command to run the application
+CMD ["npm", "start"]
